@@ -1,0 +1,66 @@
+#############################################################
+## JOB DESCRIPTION                                         ##
+#############################################################
+
+# Input
+structure          {psf}
+coordinates        {pdb}
+set inputname      {inputs}
+binCoordinates     $inputname.restart.coor
+binVelocities      $inputname.restart.vel
+extendedSystem     $inputname.restart.xsc
+firsttimestep      0
+paraTypeCharmm      on
+{parameters}
+set temperature     310.0
+
+# Output
+outputName         {output}
+restartfreq         5000
+dcdfreq             5000
+outputEnergies      5000
+
+#############################################################
+## SIMULATION PARAMETERS                                   ##
+#############################################################
+
+# Force-Field Parameters (nonbonded)
+exclude             scaled1-4
+1-4scaling          1.0
+cutoff              997.
+switching           off
+pairlistdist        999.
+timestep            1.0
+rigidBonds          none
+nonbondedFreq       1
+fullElectFrequency  2
+stepspercycle       10
+
+# Constant Temperature Control
+langevin            on
+langevinDamping     2
+langevinTemp        310
+langevinHydrogen    on
+
+# Constraint atoms
+constraints         on
+consexp             2
+consref             {consref}
+conskfile           {consfile}
+conskcol            B
+
+# Fixed atoms
+fixedAtoms          on
+fixedAtomsFile      fix_namd.pdb
+fixedAtomsCol       B
+
+# Restrain distances between ion pairs!
+extraBondsFile      {bonds}
+extraBonds          on
+
+#############################################################
+## EXECUTION SCRIPT                                        ##
+#############################################################
+
+run                 5000
+minimize            5000

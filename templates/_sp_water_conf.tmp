@@ -1,0 +1,54 @@
+#############################################################
+## JOB DESCRIPTION                                         ##
+#############################################################
+
+# Input
+structure          {psf}
+coordinates        {pdb}
+firsttimestep      0
+paraTypeCharmm      on
+{parameters}
+temperature         310
+set temperature     310.0
+extendedSystem      {xsc}
+
+# Output
+outputName         {output}
+
+#############################################################
+## SIMULATION PARAMETERS                                   ##
+#############################################################
+
+# Force-Field Parameters (nonbonded)
+exclude             scaled1-4
+1-4scaling          1.0
+cutoff              12.
+switching           on
+switchdist          10
+pairlistdist        14.
+
+# Integrator Parameters
+timestep            1.0
+rigidBonds          none
+nonbondedFreq       1
+fullElectFrequency  2
+stepspercycle       10
+
+# PBC and PME
+wrapWater           yes
+wrapAll             no
+PME                 yes
+PMEInterpOrder      6
+PMEGridSpacing      1.0
+
+# Constant Temperature Control
+langevin            on
+langevinDamping     1
+langevinTemp        310
+langevinHydrogen    off
+
+#############################################################
+## EXECUTION SCRIPT                                        ##
+#############################################################
+
+minimize 0

@@ -1,0 +1,7 @@
+mol new {psf} type psf waitfor all
+mol addfile {pdb} type pdb waitfor all
+package require namdenergy 1.4
+set sel [atomselect top {selection}]
+set out {outfile}
+namdenergy -nonb -conf -sel $sel -cutoff 17 -switch 15  -ofile $out -par {prms} -exe "{exe}"
+quit

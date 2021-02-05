@@ -1,0 +1,8 @@
+.idea/
+Testdir/
+__pycache__/
+plugins/__pycache__/
+plugins/random/__pycache__/
+test
+toppar/
+

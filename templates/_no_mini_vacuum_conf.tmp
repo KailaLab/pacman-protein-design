@@ -1,0 +1,59 @@
+#############################################################
+## JOB DESCRIPTION                                         ##
+#############################################################
+
+# Input
+structure         {psf}
+coordinates       {pdb}
+firsttimestep      0
+paraTypeCharmm      on
+{parameters}
+temperature         310
+set temperature     310.0
+
+# Output
+outputName          minim
+
+#############################################################
+## SIMULATION PARAMETERS                                   ##
+#############################################################
+
+# Force-Field Parameters (nonbonded)
+exclude             scaled1-4
+1-4scaling          1.0
+cutoff              997.
+switching           off
+pairlistdist        999.
+timestep            1.0
+rigidBonds          none
+nonbondedFreq       1
+fullElectFrequency  2
+stepspercycle       10
+
+# Constant Temperature Control
+langevin            on
+langevinDamping     2
+langevinTemp        310
+langevinHydrogen    on
+
+# Constraint atoms
+constraints         on
+consexp             2
+consref             {pdb}
+conskfile           {pdb}
+conskcol            O
+
+# Fixed atoms
+fixedAtoms          on
+fixedAtomsFile      {pdb}
+fixedAtomsCol       B
+
+# Restrain distances between ion pairs!
+extraBondsFile      {bonds}
+extraBonds          on
+
+#############################################################
+## EXECUTION SCRIPT                                        ##
+#############################################################
+
+minimize            0

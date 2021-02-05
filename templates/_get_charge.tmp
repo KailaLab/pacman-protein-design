@@ -1,0 +1,6 @@
+mol new {psf} type psf
+set charge [eval "vecadd [[atomselect top protein] get charge]"]
+set file1 [open {name} w]
+puts $file1 $charge
+close $file1
+quit

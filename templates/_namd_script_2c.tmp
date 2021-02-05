@@ -1,0 +1,6 @@
+#!/bin/bash -l
+SDIR={direc}
+module load namd
+module load gcc
+charmrun +p{cpus} namd2 {conf1} > {out1}
+charmrun +p{cpus} namd2 {conf2} > {out2}

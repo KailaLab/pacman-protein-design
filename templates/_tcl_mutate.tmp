@@ -1,0 +1,34 @@
+package require psfgen
+proc mutate_res {{{args} prot}} {{
+mol new $prot type pdb
+set str "all and not (resid {pos} and not name C O N CA HA HN)"
+set sel [atomselect top $str]
+#set file_tmp $prot
+set file_tmp $prot.temp.pdb
+$sel writepdb $file_tmp
+resetpsf
+{topology}
+segment {segname} {{
+        pdb $file_tmp
+        {mutations}
+}}
+coordpdb $file_tmp
+foreach pdb [lsort [glob {dir}seg*.pdb]] {{
+  if {{ $pdb != $file_tmp && $pdb != $prot}} {{
+    mol new $pdb type pdb
+    set sel [atomselect top "index 0"]
+    set segid [$sel get segid]
+    segment $segid {{
+      first NONE
+      last NONE
+      pdb $pdb
+    }}
+   coordpdb $pdb $segid
+ }}
+}}
+#patch FPZF ZZ2:1
+#patch PHEM P1:46 ZZ2:1
+guesscoord
+writepdb {pdb_updated}
+writepsf {psf_updated}
+}}

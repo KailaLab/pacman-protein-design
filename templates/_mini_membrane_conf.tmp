@@ -1,0 +1,90 @@
+#############################################################
+## JOB DESCRIPTION                                         ##
+#############################################################
+
+# Input
+structure         {psf}
+coordinates       {pdb}
+firsttimestep      0
+paraTypeCharmm      on
+{parameters}
+temperature         310
+set temperature     310.0
+
+# Output
+outputName          minim
+dcdfreq             10000
+outputEnergies      5000
+restartfreq         10000
+
+#############################################################
+## SIMULATION PARAMETERS                                   ##
+#############################################################
+
+# Force-Field Parameters (nonbonded)
+exclude             scaled1-4
+1-4scaling          1.0
+pairlistdist        14.
+cutoff              12.
+switchdist          10.
+switching           on
+vdwForceSwitching   yes
+timestep            1.0
+rigidBonds          none
+nonbondedFreq       1
+fullElectFrequency  2
+stepspercycle       10
+
+# PBC and PME
+cellBasisVector1    {x}  0.0  0.0
+cellBasisVector2    0.0  {y}  0.0
+cellBasisVector3    0.0  0.0  {z}
+cellOrigin          {cx} {cy} {cz}
+wrapWater           yes
+wrapAll             yes
+PME                 yes
+PMEInterpOrder      6
+PMEGridSizeX        {pmex}
+PMEGridSizeY        {pmey}
+PMEGridSizeZ        {pmez}
+
+# Constant Temperature Control
+langevin            on
+langevinDamping     1
+langevinTemp        $temperature
+langevinHydrogen    off
+
+# Constant pressure control
+useGroupPressure        yes ;# needed for rigidBonds
+useFlexibleCell         no
+useConstantArea         no
+langevinPiston          on
+langevinPistonTarget    1.01325 ;#  in bar -> 1 atm
+langevinPistonPeriod    100.0
+langevinPistonDecay     50.0
+langevinPistonTemp      $temperature
+
+# Constraints
+constraints         on
+consexp             2
+consref             {pdb}
+conskfile           {pdb}
+conskcol            O
+
+# Fixed atoms
+fixedAtoms          on
+fixedAtomsFile      {pdb}
+fixedAtomsCol       B
+
+# Restrain distances between ion pairs!
+extraBondsFile      {bonds}
+extraBonds          on
+
+#############################################################
+## EXECUTION SCRIPT                                        ##
+#############################################################
+
+minimize            10000
+reinitvels          $temperature
+run                 5000
+minimize            5000

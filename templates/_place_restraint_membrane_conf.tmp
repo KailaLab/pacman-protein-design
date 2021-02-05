@@ -1,0 +1,83 @@
+#############################################################
+## JOB DESCRIPTION                                         ##
+#############################################################
+
+# Input
+structure          {psf}
+coordinates        {pdb}
+firsttimestep      0
+paraTypeCharmm      on
+{parameters}
+temperature         310
+set temperature     310.0
+extendedSystem      sp_out.xsc
+
+# Output
+outputName         {output}
+restartfreq         5000
+dcdfreq             5000
+outputEnergies      2500
+
+#############################################################
+## SIMULATION PARAMETERS                                   ##
+#############################################################
+
+# Force-Field Parameters (nonbonded)
+exclude             scaled1-4
+1-4scaling          1.0
+cutoff              12
+switching           on
+switchdist          10
+pairlistdist        14
+timestep            1.0
+rigidBonds          none
+nonbondedFreq       1
+fullElectFrequency  2
+stepspercycle       10
+
+# PBC and PME
+wrapWater           yes
+wrapAll             yes
+PME                 yes
+PMEInterpOrder      6
+PMEGridSpacing      1.0
+
+# Constant pressure control
+useGroupPressure        yes ;# needed for rigidBonds
+useFlexibleCell         yes
+useConstantArea         yes
+langevinPiston          on
+langevinPistonTarget    1.01325 ;#  in bar -> 1 atm
+langevinPistonPeriod    100.0
+langevinPistonDecay     50.0
+langevinPistonTemp      $temperature
+
+# Constant Temperature Control
+langevin            on
+langevinDamping     1
+langevinTemp        310
+langevinHydrogen    off
+
+# Constraint atoms
+constraints         on
+consexp             2
+consref             {consref}
+conskfile           {consfile}
+conskcol            B
+
+# Fixed atoms
+fixedAtoms          on
+fixedAtomsFile      fix_namd.pdb
+fixedAtomsCol       B
+
+# Restrain distances between ion pairs!
+extraBondsFile      {bonds}
+extraBonds          on
+
+#############################################################
+## EXECUTION SCRIPT                                        ##
+#############################################################
+
+minimize            2500
+reinitvels          $temperature
+run                 2500

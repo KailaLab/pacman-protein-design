@@ -1,0 +1,13 @@
+#!/bin/bash -l
+SDIR={direc}
+. /etc/profile
+. /etc/profile.d/modules.sh
+
+module unload mpi.ibm
+module load mpi.intel
+
+module load fftw
+
+mpiexec -n {cpus} /lrz/sys/applications/namd/2.10/superimpi/namd2 {conf} > {out}
+# for Haswell nodes
+# mpiexec -n {cpus} /lrz/sys/applications/namd/2.12/Supercomputer/Medium_Node/namd2

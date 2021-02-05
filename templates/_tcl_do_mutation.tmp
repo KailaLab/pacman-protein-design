@@ -1,0 +1,16 @@
+source {mutate_tcl}
+mutate_res {args} {seg_pdb}
+molecule load pdb {pdb_updated}
+set all [atomselect top "all"]
+set fix_namd [atomselect top "{fixed_vmd}"]
+set constr [atomselect top "name CA"]
+$all set beta 0.0
+$fix_namd set beta 1.0
+$all writepdb {fix_namd_pdb}
+$all set beta 0.0
+$constr set beta 1.0
+$all writepdb {constr_pdb}
+$all set occupancy 0.0
+$all set beta 0.0
+$all writepdb {pdb_updated}
+quit

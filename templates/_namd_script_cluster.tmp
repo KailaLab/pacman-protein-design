@@ -1,0 +1,6 @@
+#!/bin/bash -l
+SDIR={direc}
+source /etc/profile.d/modules.sh
+module load namd
+module load gcc
+mpiexec -n {cpus} namd2 {conf} > {out}
